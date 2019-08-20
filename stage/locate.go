@@ -32,10 +32,13 @@ import (
 //
 //	"/home/joeblow/workspaces/myproject/.ii/stage"
 func Locate(path string) (stagepath string, err error) {
+	return locate(path, iirepo.LocateRoot)
+}
 
+func locate(path string, locateRootFunc func(string)(string,error)) (stagepath string, err error) {
 	iirepo_logger.Debugf("iirepo_stage.Locate(%q): begin", path)
 
-	repopath, err := iirepo.Locate(path)
+	repopath, err := locateRootFunc(path)
 	if nil != err {
 		return "", err
 	}
