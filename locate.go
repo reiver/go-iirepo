@@ -1,6 +1,8 @@
 package iirepo
 
 import (
+	"github.com/reiver/go-iirepo/logger"
+
 	"fmt"
 	"path/filepath"
 )
@@ -32,41 +34,26 @@ import (
 //
 //	"/home/joeblow/workspaces/myproject/.ii"
 func Locate(path string) (repopath string, err error) {
-	x := path
 
+	iirepo_logger.Debugf("iirepo.Locate(%q): begin", path)
+
+	var rootpath string
 	{
-		isADir, err := isDir(path)
+		var err error
+
+		rootpath, err = LocateRoot(path)
 		if nil != err {
 			return "", err
 		}
-
-		if !isADir {
-			x = filepath.Dir(x)
-		}
 	}
+	iirepo_logger.Debugf("iirepo.Locate(%q): rootpath = %q", path, rootpath)
 
-	for "" != x {
-		if isADir, err := isDir(x); nil != err {
-			return "", err
-		} else if !isADir {
-			return "", fmt.Errorf("iirepo: %s is not a directory", x)
-		}
+	repopath = filepath.Join(rootpath, Name())
+	iirepo_logger.Debugf("iirepo.Locate(%q): repopath = %q", path, repopath)
 
-		repopath = Path(x)
+	iirepo_logger.Debugf("iirepo.Locate(%q): end", path)
 
-		isADir, err := isDir(repopath)
-		if nil == err && isADir {
-			return x, nil
-		}
-
-		parentdir := filepath.Dir(x)
-		if x == parentdir {
-			break
-		}
-		x = parentdir
-	}
-
-	return "", fmt.Errorf("iirepo: repo not found for %s", path)
+	return rootpath, nil
 }
 
 // LocateRoot returns the path to the root for ‘path’.
@@ -96,12 +83,46 @@ func Locate(path string) (repopath string, err error) {
 //
 //	"/home/joeblow/workspaces/myproject"
 func LocateRoot(path string) (rootpath string, err error) {
-	repopath, err := Locate(path)
-	if nil != err {
-		return "", err
+
+	iirepo_logger.Debugf("iirepo.LocateRoot(%q): begin", path)
+
+	x := path
+
+	{
+		isADir, err := isDir(path)
+		if nil != err {
+			return "", err
+		}
+
+		if !isADir {
+			x = filepath.Dir(x)
+		}
 	}
 
-	rootpath = filepath.Dir(repopath)
+	for "" != x {
+		if isADir, err := isDir(x); nil != err {
+			return "", err
+		} else if !isADir {
+			return "", fmt.Errorf("iirepo: %s is not a directory", x)
+		}
 
-	return rootpath, nil
+		repopath := Path(x)
+
+		isADir, err := isDir(repopath)
+		if nil == err && isADir {
+			break
+		}
+
+		parentdir := filepath.Dir(x)
+		if x == parentdir {
+			return "", fmt.Errorf("iirepo: repo not found for %s", path)
+		}
+		x = parentdir
+	}
+	iirepo_logger.Debugf("iirepo.LocateRoot(%q): found root = %q", path, x)
+
+
+	iirepo_logger.Debugf("iirepo.LocateRoot(%q): end", path)
+
+	return x, nil
 }
