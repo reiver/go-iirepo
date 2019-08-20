@@ -1,30 +1,35 @@
 package iirepo
 
 import (
-	"fmt"
 	"os"
 )
 
-func assertIsDir(path string) (err error) {
+func isDir(path string) (tis bool, err error) {
 	var file *os.File
 	{
 		file, err = os.Open(path)
 		if nil != err {
-			return err
+			return false, err
 		}
 		defer func(){
-			err = file.Close()
+			e := file.Close()
+			if nil == err {
+				err = e
+			}
 		}()
 	}
 
 	var fileinfo os.FileInfo
 	{
 		fileinfo, err = file.Stat()
+		if nil != err {
+			return false, err
+		}
 	}
 
 	if ! fileinfo.IsDir() {
-		return fmt.Errorf("ii: %q is not a directory", path)
+		return false, nil
 	}
 
-	return nil
+	return true, nil
 }

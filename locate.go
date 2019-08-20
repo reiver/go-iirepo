@@ -34,15 +34,28 @@ import (
 func Locate(path string) (repopath string, err error) {
 	x := path
 
-	for "" != x {
-		if err = assertIsDir(x); nil != err {
+	{
+		isADir, err := isDir(path)
+		if nil != err {
 			return "", err
+		}
+
+		if !isADir {
+			x = filepath.Dir(x)
+		}
+	}
+
+	for "" != x {
+		if isADir, err := isDir(x); nil != err {
+			return "", err
+		} else if !isADir {
+			return "", fmt.Errorf("iirepo: %s is not a directory", x)
 		}
 
 		repopath = Path(x)
 
-		err = assertIsDir(repopath)
-		if nil == err {
+		isADir, err := isDir(repopath)
+		if nil == err && isADir {
 			return x, nil
 		}
 
