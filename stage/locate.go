@@ -38,13 +38,13 @@ func Locate(path string) (stagepath string, err error) {
 func locate(path string, locateRootFunc func(string)(string,error)) (stagepath string, err error) {
 	iirepo_logger.Debugf("iirepo_stage.Locate(%q): begin", path)
 
-	repopath, err := locateRootFunc(path)
+	rootpath, err := locateRootFunc(path)
 	if nil != err {
 		return "", err
 	}
-	iirepo_logger.Debugf("iirepo_stage.Locate(%q): repopath = %q", path, repopath)
+	iirepo_logger.Debugf("iirepo_stage.Locate(%q): rootpath = %q", path, rootpath)
 
-	stagepath = Path(repopath)
+	stagepath = Path(rootpath)
 	iirepo_logger.Debugf("iirepo_stage.Locate(%q): stagepath = %q", path, stagepath)
 
 	iirepo_logger.Debugf("iirepo_stage.Locate(%q): end", path)
