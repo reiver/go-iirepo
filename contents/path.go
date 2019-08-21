@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 )
 
-func Path(grandparent string) string {
-	repopath := iirepo.Path(grandparent)
+func Path(rootpath string) string {
+	repopath := iirepo.Path(rootpath)
 
 	path := filepath.Join(repopath, Name())
 

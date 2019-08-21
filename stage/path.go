@@ -7,17 +7,17 @@ import (
 	"path/filepath"
 )
 
-func Path(grandparent string) string {
+func Path(rootpath string) string {
 
-	iirepo_logger.Debugf("iirepo_stage.Path(%q): begin", grandparent)
+	iirepo_logger.Debugf("iirepo_stage.Path(%q): begin", rootpath)
 
-	repopath := iirepo.Path(grandparent)
-	iirepo_logger.Debugf("iirepo_stage.Path(%q): repopath = %q", grandparent, repopath)
+	repopath := iirepo.Path(rootpath)
+	iirepo_logger.Debugf("iirepo_stage.Path(%q): repopath = %q", rootpath, repopath)
 
 	path := filepath.Join(repopath, Name())
-	iirepo_logger.Debugf("iirepo_stage.Path(%q): path = %q", grandparent, path)
+	iirepo_logger.Debugf("iirepo_stage.Path(%q): path = %q", rootpath, path)
 
-	iirepo_logger.Debugf("iirepo_stage.Path(%q): end", grandparent)
+	iirepo_logger.Debugf("iirepo_stage.Path(%q): end", rootpath)
 
 	return path
 }
