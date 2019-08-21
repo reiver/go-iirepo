@@ -115,7 +115,7 @@ func LocateRoot(path string) (rootpath string, err error) {
 
 		parentdir := filepath.Dir(x)
 		if x == parentdir {
-			return "", fmt.Errorf("iirepo: repo not found for %s", path)
+			return "", errNotFoundf("%s repo not found for %s", Name(), path)
 		}
 		x = parentdir
 	}
