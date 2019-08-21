@@ -50,17 +50,6 @@ func StagedPath(path string) (stagedpath string, err error) {
 	}
 	iirepo_logger.Debugf("iirepo_stage.StagedPath(%q): srcpath = %q", path, srcpath)
 
-	var stagepath string
-	{
-		var err error
-
-		stagepath, err = Locate(srcpath)
-		if nil != err {
-			return "", err
-		}
-	}
-	iirepo_logger.Debugf("iirepo_stage.StagedPath(%q): stagepath = %q", path, stagepath)
-
 	var rootpath string
 	{
 		var err error
@@ -72,6 +61,32 @@ func StagedPath(path string) (stagedpath string, err error) {
 	}
 	iirepo_logger.Debugf("iirepo_stage.StagedPath(%q): rootpath = %q", path, rootpath)
 
+	var stagepath string
+	{
+		var err error
+
+		stagepath, err = Locate(srcpath)
+		if nil != err {
+			return "", err
+		}
+	}
+	iirepo_logger.Debugf("iirepo_stage.StagedPath(%q): stagepath = %q", path, stagepath)
+
+	stagedpath, err = stagedPath(srcpath, rootpath, stagepath)
+	if nil != err {
+		return "", err
+	}
+	iirepo_logger.Debugf("iirepo_stage.StagedPath(%q): stagedpath = %q", path, stagedpath)
+
+	iirepo_logger.Debugf("iirepo_stage.StagedPath(%q): end", path)
+
+	return stagedpath, err
+}
+
+func stagedPath(srcpath string, rootpath string, stagepath string) (stagedpath string, err error) {
+
+	iirepo_logger.Debugf("iirepo_stage.stagedPath(%q, %q): begin", srcpath, rootpath)
+
 	var rootpathslash string
 	{
 		var builder strings.Builder
@@ -81,7 +96,7 @@ func StagedPath(path string) (stagedpath string, err error) {
 
 		rootpathslash = builder.String()
 	}
-	iirepo_logger.Debugf("iirepo_stage.StagedPath(%q): rootpathslash = %q", path, rootpathslash)
+	iirepo_logger.Debugf("iirepo_stage.stagedPath(%q, %q): rootpathslash = %q", srcpath, rootpath, rootpathslash)
 
 	var relsrcpath string
 	{
@@ -91,15 +106,15 @@ func StagedPath(path string) (stagedpath string, err error) {
 
 		relsrcpath = srcpath[len(rootpathslash):]
 	}
-	iirepo_logger.Debugf("iirepo_stage.StagedPath(%q): relsrcpath = %q", path, relsrcpath)
+	iirepo_logger.Debugf("iirepo_stage.stagedPath(%q, %q): relsrcpath = %q", srcpath, rootpath, relsrcpath)
 
 	//var stagedpath string
 	{
 		stagedpath = filepath.Join(stagepath, relsrcpath)
 	}
-	iirepo_logger.Debugf("iirepo_stage.StagedPath(%q): stagedpath = %q", path, stagedpath)
+	iirepo_logger.Debugf("iirepo_stage.stagedPath(%q, %q): stagedpath = %q", srcpath, rootpath, stagedpath)
 
-	iirepo_logger.Debugf("iirepo_stage.StagedPath(%q): end", path)
+	iirepo_logger.Debugf("iirepo_stage.stagedPath(%q, %q): end", srcpath, rootpath)
 
 	return stagedpath, nil
 }
