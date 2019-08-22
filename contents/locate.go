@@ -31,11 +31,11 @@ import (
 // Would return a value for ‘location’ of:
 //
 //	"/home/joeblow/workspaces/myproject/.ii/contents"
-func Locate(path string) (stagepath string, err error) {
+func Locate(path string) (contentspath string, err error) {
 	return locate(path, iirepo.LocateRoot)
 }
 
-func locate(path string, locateRootFunc func(string)(string,error)) (stagepath string, err error) {
+func locate(path string, locateRootFunc func(string)(string,error)) (contentspath string, err error) {
 	iirepo_logger.Debugf("iirepo_contents.Locate(%q): begin", path)
 
 	rootpath, err := locateRootFunc(path)
@@ -44,10 +44,10 @@ func locate(path string, locateRootFunc func(string)(string,error)) (stagepath s
 	}
 	iirepo_logger.Debugf("iirepo_contents.Locate(%q): rootpath = %q", path, rootpath)
 
-	stagepath = Path(rootpath)
-	iirepo_logger.Debugf("iirepo_contents.Locate(%q): stagepath = %q", path, stagepath)
+	contentspath = Path(rootpath)
+	iirepo_logger.Debugf("iirepo_contents.Locate(%q): contentspath = %q", path, contentspath)
 
 	iirepo_logger.Debugf("iirepo_contents.Locate(%q): end", path)
 
-	return stagepath, nil
+	return contentspath, nil
 }
