@@ -27,6 +27,11 @@ func (receiver walker) WalkFunc(path string, info os.FileInfo, err error) error 
 		return err
 	}
 
+	// Skip "."
+	if "." == path {
+		return nil
+	}
+
 	relpath, err := filepath.Rel(receiver.BasePath, path)
 	if nil != err {
 		return err
