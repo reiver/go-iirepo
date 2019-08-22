@@ -5,14 +5,27 @@ import (
 
 	"os"
 	"path/filepath"
+	"syscall"
 )
 
 func List(path string) ([][]string, error) {
 
 	iirepo_logger.Debugf("iirepo_apps.List(%q): begin", path)
+	defer iirepo_logger.Debugf("iirepo_apps.List(%q): end", path)
 
 	appspath, err := Locate(path)
 	if nil != err {
+		switch patherror := err.(type) {
+		case *os.PathError:
+			switch errno := patherror.Err.(type) {
+			case syscall.Errno:
+				if syscall.ENOENT == errno {
+					iirepo_logger.Debugf("iirepo_apps.List(%q): repo exists, but %s/ not created yet (therefore no apps) (note: this is not an error)", path, Name())
+					return nil, nil
+				}
+			}
+		}
+
 		return nil, err
 	}
 	iirepo_logger.Debugf("iirepo_apps.List(%q): appspath = %q", path, appspath)
@@ -36,8 +49,6 @@ func List(path string) ([][]string, error) {
 	if nil != err {
 		return nil, err
 	}
-
-	iirepo_logger.Debugf("iirepo_apps.List(%q): end", path)
 
 	return apps, nil
 }
