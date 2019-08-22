@@ -1,8 +1,8 @@
-package iirepo_app
+package iirepo_apps
 
-const name string = "app"
+const name string = "apps"
 
-// Name returns the name of the repo app directory.
+// Name returns the name of the repo apps directory.
 func Name() string {
 	return name
 }
