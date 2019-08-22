@@ -1,4 +1,4 @@
-package iirepo_bin
+package iirepo_app
 
 import (
 	"github.com/reiver/go-iirepo"

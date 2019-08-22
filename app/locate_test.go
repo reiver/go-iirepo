@@ -1,4 +1,4 @@
-package iirepo_bin
+package iirepo_app
 
 import (
 	"testing"
@@ -14,17 +14,17 @@ func TestLocate(t *testing.T) {
 		{
 			Path:     "/apple/banana/cherry/date/file.txt",
 			RepoPath: "/apple",
-			Expected: "/apple/.ii/bin",
+			Expected: "/apple/.ii/app",
 		},
 		{
 			Path:     "/apple/banana/cherry/date/file.txt",
 			RepoPath: "/apple/banana",
-			Expected: "/apple/banana/.ii/bin",
+			Expected: "/apple/banana/.ii/app",
 		},
 		{
 			Path:     "/apple/banana/cherry/date/file.txt",
 			RepoPath: "/apple/banana/cherry",
-			Expected: "/apple/banana/cherry/.ii/bin",
+			Expected: "/apple/banana/cherry/.ii/app",
 		},
 	}
 

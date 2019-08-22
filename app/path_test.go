@@ -1,7 +1,7 @@
-package iirepo_bin_test
+package iirepo_app_test
 
 import (
-	"github.com/reiver/go-iirepo/bin"
+	"github.com/reiver/go-iirepo/app"
 
 	"testing"
 )
@@ -14,24 +14,24 @@ func TestPath(t *testing.T) {
 	}{
 		{
 			RootPath: "/apple",
-			Expected: "/apple/.ii/bin",
+			Expected: "/apple/.ii/app",
 		},
 		{
 			RootPath: "/apple/BANANA",
-			Expected: "/apple/BANANA/.ii/bin",
+			Expected: "/apple/BANANA/.ii/app",
 		},
 		{
 			RootPath: "/apple/BANANA/Cherry",
-			Expected: "/apple/BANANA/Cherry/.ii/bin",
+			Expected: "/apple/BANANA/Cherry/.ii/app",
 		},
 		{
 			RootPath: "/apple/BANANA/Cherry/dATE",
-			Expected: "/apple/BANANA/Cherry/dATE/.ii/bin",
+			Expected: "/apple/BANANA/Cherry/dATE/.ii/app",
 		},
 	}
 
 	for testNumber, test := range tests {
-		actual := iirepo_bin.Path(test.RootPath)
+		actual := iirepo_app.Path(test.RootPath)
 
 		if expected := test.Expected; expected != actual {
 			t.Errorf("For test #%d, the actual location is not what was expected.", testNumber)

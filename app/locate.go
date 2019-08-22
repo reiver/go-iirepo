@@ -1,11 +1,11 @@
-package iirepo_bin
+package iirepo_app
 
 import (
 	"github.com/reiver/go-iirepo"
 	"github.com/reiver/go-iirepo/logger"
 )
 
-// Locate returns the path to the repo's bin for ‘path’.
+// Locate returns the path to the repo's app for ‘path’.
 //
 // For example, if name of the repo directory is “.ii/”, and the directory structure looks like:
 //
@@ -26,28 +26,28 @@ import (
 //
 // Then calling:
 //
-//	location, err := iirepo_bin.Locate("/home/joeblow/workspaces/myproject/numbers")
+//	location, err := iirepo_app.Locate("/home/joeblow/workspaces/myproject/numbers")
 //
 // Would return a value for ‘location’ of:
 //
-//	"/home/joeblow/workspaces/myproject/.ii/bin"
-func Locate(path string) (binpath string, err error) {
+//	"/home/joeblow/workspaces/myproject/.ii/app"
+func Locate(path string) (apppath string, err error) {
 	return locate(path, iirepo.LocateRoot)
 }
 
-func locate(path string, locateRootFunc func(string)(string,error)) (binpath string, err error) {
-	iirepo_logger.Debugf("iirepo_bin.Locate(%q): begin", path)
+func locate(path string, locateRootFunc func(string)(string,error)) (apppath string, err error) {
+	iirepo_logger.Debugf("iirepo_app.Locate(%q): begin", path)
 
 	rootpath, err := locateRootFunc(path)
 	if nil != err {
 		return "", err
 	}
-	iirepo_logger.Debugf("iirepo_bin.Locate(%q): rootpath = %q", path, rootpath)
+	iirepo_logger.Debugf("iirepo_app.Locate(%q): rootpath = %q", path, rootpath)
 
-	binpath = Path(rootpath)
-	iirepo_logger.Debugf("iirepo_bin.Locate(%q): binpath = %q", path, binpath)
+	apppath = Path(rootpath)
+	iirepo_logger.Debugf("iirepo_app.Locate(%q): apppath = %q", path, apppath)
 
-	iirepo_logger.Debugf("iirepo_bin.Locate(%q): end", path)
+	iirepo_logger.Debugf("iirepo_app.Locate(%q): end", path)
 
-	return binpath, nil
+	return apppath, nil
 }
