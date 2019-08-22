@@ -5,6 +5,7 @@ import (
 
 	"os"
 	"path/filepath"
+	"strings"
 	"syscall"
 )
 
@@ -41,6 +42,13 @@ func List(path string) ([][]string, error) {
 	err = filepath.Walk(appspath, func(apppath string, info os.FileInfo, err error) error {
 		if nil != err {
 			return err
+		}
+
+		if appspath == apppath {
+			return nil
+		}
+		if !strings.HasPrefix(apppath, appspath) {
+			return nil
 		}
 
 		appName := filepath.Base(apppath)
