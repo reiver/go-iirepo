@@ -14,10 +14,11 @@ func Walk(path string, fn func(relstagedpath string)error) error {
 		return err
 	}
 
-	return filepath.Walk(stagepath, walker{fn}.WalkFunc)
+	return filepath.Walk(stagepath, walker{stagepath, fn}.WalkFunc)
 }
 
 type walker struct {
+	BasePath string
 	Func func(relstagedpath string)error
 }
 
@@ -26,5 +27,10 @@ func (receiver walker) WalkFunc(path string, info os.FileInfo, err error) error 
 		return err
 	}
 
-	return receiver.Func(path)
+	relpath, err := filepath.Rel(receiver.BasePath, path)
+	if nil != err {
+		return err
+	}
+
+	return receiver.Func(relpath)
 }
