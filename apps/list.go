@@ -1,6 +1,8 @@
 package iirepo_apps
 
 import (
+	"github.com/reiver/go-iirepo/logger"
+
 	"os"
 	"path/filepath"
 )
