@@ -15,20 +15,26 @@ func List(path string) ([][]string, error) {
 
 	appspath, err := Locate(path)
 	if nil != err {
-		switch patherror := err.(type) {
-		case *os.PathError:
-			switch errno := patherror.Err.(type) {
-			case syscall.Errno:
-				if syscall.ENOENT == errno {
-					iirepo_logger.Debugf("iirepo_apps.List(%q): repo exists, but %s/ not created yet (therefore no apps) (note: this is not an error)", path, Name())
-					return nil, nil
-				}
-			}
-		}
-
 		return nil, err
 	}
 	iirepo_logger.Debugf("iirepo_apps.List(%q): appspath = %q", path, appspath)
+
+	{
+		_, err := os.Stat(appspath)
+		if nil != err {
+			switch patherror := err.(type) {
+			case *os.PathError:
+				switch errno := patherror.Err.(type) {
+				case syscall.Errno:
+					if syscall.ENOENT == errno {
+						iirepo_logger.Debugf("iirepo_apps.List(%q): repo exists, but %s/ not created yet (therefore no apps) (note: this is not considered an error)", path, Name())
+						return nil, nil
+					}
+				}
+			}
+			return nil, err
+		}
+	}
 
 	var apps [][]string
 
